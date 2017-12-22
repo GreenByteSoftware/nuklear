@@ -260,6 +260,8 @@ nk_sdl_handle_event(SDL_Event *evt)
             nk_input_key(ctx, NK_KEY_TAB, down);
         else if (sym == SDLK_BACKSPACE)
             nk_input_key(ctx, NK_KEY_BACKSPACE, down);
+        else if (sym == SDLK_LCTRL || sym == SDLK_RCTRL)
+            nk_input_key(ctx, NK_KEY_CTRL, down);
         else if (sym == SDLK_HOME) {
             nk_input_key(ctx, NK_KEY_TEXT_START, down);
             nk_input_key(ctx, NK_KEY_SCROLL_START, down);
