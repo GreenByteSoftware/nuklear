@@ -273,6 +273,8 @@ nk_d3d9_handle_event(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
         int down = !((lparam >> 31) & 1);
         int ctrl = GetKeyState(VK_CONTROL) & (1 << 15);
 
+        nk_input_key(&d3d9.ctx, NK_KEY_CTRL, ctrl);
+
         switch (wparam)
         {
         case VK_SHIFT:
@@ -280,6 +282,7 @@ nk_d3d9_handle_event(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
         case VK_RSHIFT:
             nk_input_key(&d3d9.ctx, NK_KEY_SHIFT, down);
             return 1;
+
 
         case VK_DELETE:
             nk_input_key(&d3d9.ctx, NK_KEY_DEL, down);
