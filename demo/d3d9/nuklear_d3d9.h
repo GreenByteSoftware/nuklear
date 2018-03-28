@@ -72,7 +72,7 @@ nk_d3d9_create_state()
 {
     HRESULT hr;
 
-    hr = IDirect3DDevice9_BeginStateBlock(d3d9.device);
+    hr = IDirect3DDevice9_CreateStateBlock(d3d9.device, D3DSBT_ALL, &d3d9.state);
     NK_ASSERT(SUCCEEDED(hr));
 
     /* vertex format */
@@ -105,8 +105,6 @@ nk_d3d9_create_state()
     IDirect3DDevice9_SetTextureStageState(d3d9.device, 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
     IDirect3DDevice9_SetTextureStageState(d3d9.device, 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
 
-    hr = IDirect3DDevice9_EndStateBlock(d3d9.device, &d3d9.state);
-    NK_ASSERT(SUCCEEDED(hr));
 }
 
 NK_API void
@@ -115,9 +113,6 @@ nk_d3d9_render(enum nk_anti_aliasing AA)
     HRESULT hr;
 
     nk_d3d9_create_state();
-
-    hr = IDirect3DStateBlock9_Apply(d3d9.state);
-    NK_ASSERT(SUCCEEDED(hr));
 
     /* projection matrix */
     IDirect3DDevice9_SetTransform(d3d9.device, D3DTS_PROJECTION, &d3d9.projection);
@@ -189,10 +184,10 @@ nk_d3d9_render(enum nk_anti_aliasing AA)
         nk_buffer_free(&ebuf);
     }
 
-    nk_clear(&d3d9.ctx);
+	IDirect3DStateBlock9_Apply(d3d9.state);
+	IDirect3DStateBlock9_Release(d3d9.state);
 
-    IDirect3DStateBlock9_Apply(d3d9.state);
-    IDirect3DStateBlock9_Release(d3d9.state);
+    nk_clear(&d3d9.ctx);
 }
 
 static void
